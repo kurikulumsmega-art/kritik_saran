@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ... (Salin SEMUA CSS dari file sebelumnya di sini) ... */
         :root {
             --primary-color: #4A90E2;
             --secondary-color: #50E3C2;
@@ -117,6 +116,7 @@
         </div>
     </div>
 
+    <!-- PERHATIKAN BAGIAN INI: URL GOOGLE SCRIPT SUDAH TERBARU -->
     <script>
         const categoryCards = document.querySelectorAll('.category-card');
         const formContainer = document.getElementById('form-section');
@@ -127,8 +127,8 @@
         const modal = document.getElementById('confirmationModal');
         const submitBtn = document.querySelector('.submit-btn');
 
-        // --- URL GOOGLE APPS SCRIPT ANDA ---
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSOGDk1G1OmupuZ6-miIGIGJE71xDr6-SzEe23JhIKZEAhTlOymgEdl42JHZrX2Hin/exec";
+        // --- URL GOOGLE APPS SCRIPT ANDA YANG PALING BARU ---
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGkaqifTnk2QqDDMKfiT4Af2YO-pUub9PBpaCL55wUuRtFDLhyEIptg9gAgWv97XCDVw/exec";
 
         categoryCards.forEach(card => {
             card.addEventListener('click', () => {
@@ -165,7 +165,6 @@
                     body: JSON.stringify(data)
                 });
                 
-                // Cek apakah respons dari script adalah sukses
                 const result = await response.json();
                 if (result.status === 'success') {
                     showModal();
