@@ -1,0 +1,100 @@
+<!-- GANTI BAGIAN INI DI DALAM FILE index.html ANDA -->
+<script>
+    const categoryCards = document.querySelectorAll('.category-card');
+    const formContainer = document.getElementById('form-section');
+    const categoryInput = document.getElementById('category-input');
+    const feedbackForm = document.getElementById('feedback-form');
+    const feedbackText = document.getElementById('feedback-text');
+    const charCount = document.getElementById('char-count');
+    const modal = document.getElementById('confirmationModal');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    // --- GANTI DENGAN URL GOOGLE APPS SCRIPT ANDA YANG BARU ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSOGDk1G1OmupuZ6-miIGIGJE71xDr6-SzEe23JhIKZEAhTlOymgEdl42JHZrX2Hin/exec";
+
+    categoryCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const selectedCategory = card.dataset.category;
+            categoryInput.value = selectedCategory;
+            
+            formContainer.classList.add('active');
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    feedbackText.addEventListener('input', () => {
+        charCount.textContent = feedbackText.value.length;
+    });
+
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const category = categoryInput.value;
+        const message = feedbackText.value;
+
+        // Validasi sederhana
+        if (!category || !message) {
+            alert('Harap pilih kategori dan tulis pesan Anda.');
+            return;
+        }
+
+        // Tampilkan status loading pada tombol
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Mengirim...';
+
+        // Data yang akan dikirim
+        const data = {
+            kategori: category,
+            pesan: message
+        };
+
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            
+            // Karena Google Apps Script seringkali tidak mengirim header CORS yang benar,
+            // kita akan asumsikan berhasil jika tidak ada error jaringan.
+            
+            if (!response.ok && response.status !== 0) { 
+                throw new Error(`Gagal mengirim data. Status: ${response.status}`);
+            }
+
+            // Tampilkan modal sukses
+            showModal();
+
+            // Reset form
+            feedbackForm.reset();
+            charCount.textContent = '0';
+            formContainer.classList.remove('active');
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengirim umpan balik. Silakan coba lagi nanti.');
+        } finally {
+            // Kembalikan tombol ke keadaan semula
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Kirim Umpan Balik';
+        }
+    });
+
+    function showModal() {
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    // Tutup modal jika user klik di luar konten modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
+<!-- AKHIR DARI BAGIAN YANG DIGANTI -->
